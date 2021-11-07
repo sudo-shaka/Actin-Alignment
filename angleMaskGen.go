@@ -1,7 +1,6 @@
 package main
 
-import ("math"
-"fmt")
+import ("math")
 
 type Coord struct {
 	x, y int16
@@ -22,15 +21,12 @@ func angleMaskGen(angles []float64, line []Coord) (map[Coord][]float64, map[floa
 			rp := rotate(p, a)
 			neighborSet[rp] = true
 			if _, inside := anglesOf[rp]; !inside {
-        //fmt.Printf("%#v : %#v\n",inside,anglesOf[rp])
 				anglesOf[rp] = []float64{a}
 				angleCounts[a]++
 			} else if notInSlice(anglesOf[rp], a) {
-        fmt.Printf("%#v : %#v\n",a,anglesOf[rp])
 				anglesOf[rp] = append(anglesOf[rp], a)
 				angleCounts[a]++
 			}
-      //fmt.Printf("%#v\n",anglesOf[rp])
 		}
 	}
 
