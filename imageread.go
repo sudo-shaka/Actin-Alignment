@@ -7,6 +7,8 @@ import (
 	_ "image/png"
 	"io"
 	"math"
+
+	_ "golang.org/x/image/tiff"
 )
 
 type stats struct {
@@ -30,9 +32,9 @@ func imageRead(imreader io.Reader) ([][]uint32, stats, error) {
 	xrange := bnd.Max.X - bnd.Min.X
 	yrange := bnd.Max.Y - bnd.Min.Y
 
-	arr := make([][]uint32, xrange, xrange)
+	arr := make([][]uint32, xrange)
 	for i := bnd.Min.X; i < bnd.Max.X; i++ {
-		arr[i] = make([]uint32, yrange, yrange)
+		arr[i] = make([]uint32, yrange)
 		for j := bnd.Min.Y; j < bnd.Max.Y; j++ {
 			r, g, b, _ := img.At(i, j).RGBA()
 			val := r + g + b

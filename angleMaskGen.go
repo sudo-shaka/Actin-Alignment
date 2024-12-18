@@ -1,6 +1,8 @@
 package main
 
-import ("math")
+import (
+	"math"
+)
 
 type Coord struct {
 	x, y int16
@@ -10,12 +12,13 @@ type Coord struct {
 // Also determines how many points are covered by each rotation of the "line"
 //
 // Usage: anglesOf(point) -> slice of angles which cover this point.
-// 	angleCounts(angle) -> number of points covered by the "line" at this angle.
+//
+//	angleCounts(angle) -> number of points covered by the "line" at this angle.
 func angleMaskGen(angles []float64, line []Coord) (map[Coord][]float64, map[float64]uint8, []Coord) {
 	anglesOf := make(map[Coord][]float64)
 	angleCounts := make(map[float64]uint8)
 	neighborSet := make(map[Coord]bool)
-  
+
 	for _, a := range angles {
 		for _, p := range line {
 			rp := rotate(p, a)
@@ -31,7 +34,7 @@ func angleMaskGen(angles []float64, line []Coord) (map[Coord][]float64, map[floa
 	}
 
 	neighborSlice := make([]Coord, 0, len(line)*len(angles))
-	for n, _ := range neighborSet {
+	for n := range neighborSet {
 		neighborSlice = append(neighborSlice, n)
 	}
 	return anglesOf, angleCounts, neighborSlice

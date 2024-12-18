@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"image/png"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -16,6 +15,10 @@ func main() {
 
 	// Last argument defines what file(s) to work on
 	imgPaths := getImagePaths(os.Args[len(os.Args)-1])
+
+	if len(os.Args) <= 1 {
+		imgPaths = getImagePaths(".")
+	}
 
 	for _, path := range imgPaths {
 		fmt.Println("Getting image from ", path)
@@ -32,11 +35,11 @@ func main() {
 		}
 
 		histFile, err := os.Create(filepath.Base(path) + "-histogram.csv")
-		defer histFile.Close()
 		if err != nil {
 			fmt.Printf("Unable to create file: %v\n", err)
 			return
 		}
+		defer histFile.Close()
 
 		total := 0
 		histFile.WriteString("Angle,NumOfPixels\n")
@@ -47,11 +50,11 @@ func main() {
 		histFile.WriteString(fmt.Sprintf("total,%v\n", total))
 
 		imgFile, err := os.Create(filepath.Base(path) + "-out.png")
-		defer imgFile.Close()
 		if err != nil {
 			fmt.Printf("Unable to create file: %v\n", err)
 			return
 		}
+		defer imgFile.Close()
 
 		if err = png.Encode(imgFile, imgOut); err != nil {
 			fmt.Printf("Unable to encode image: %v\n", err)
@@ -59,7 +62,7 @@ func main() {
 		}
 	}
 
-	fmt.Println("Success!")
+	fmt.Println("Done!")
 }
 
 func getImagePaths(arg string) []string {
@@ -72,7 +75,7 @@ func getImagePaths(arg string) []string {
 		return []string{arg}
 	}
 
-	files, err := ioutil.ReadDir(arg)
+	files, err := os.ReadDir(arg)
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +85,7 @@ func getImagePaths(arg string) []string {
 		if file.IsDir() {
 			continue
 		}
-		isImg, _ := regexp.Match(`(\.png$)|(\.jpg$)|(\.gif$)`, []byte(file.Name()))
+		isImg, _ := regexp.Match(`(\.png$)|(\.jpg$)|(\.gif$)|(\.tiff$)|(\.tif$)`, []byte(file.Name()))
 		if isImg {
 			paths = append(paths, filepath.Join(arg, file.Name()))
 		}
