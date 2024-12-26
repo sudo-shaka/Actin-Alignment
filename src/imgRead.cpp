@@ -31,14 +31,14 @@ std::vector<std::filesystem::path> imgPaths(std::vector<std::string> arg){
 }
 
 //convert the imported RGB image to a 2D grayscale vector matrix
-std::vector<std::vector<int>> im2arr(cv::Mat image){
-  std::vector<std::vector<int>> imgArr;
-  imgArr.resize(image.rows);
+int** im2arr(cv::Mat image){
+  int** imgArr = new int* [image.rows];
   for(int x=0; x<image.rows;x++){
+    imgArr[x] = new int[image.cols];
     for(int y=0; y<image.cols; y++){
       cv::Vec3b bgr = image.at<cv::Vec3b>(x,y);
       int grayValue = static_cast<int>(0.114 * bgr[0] + 0.587 * bgr[1] + 0.299 * bgr[2]);
-      imgArr[x].push_back(grayValue);
+      imgArr[x][y] = grayValue;
     }
   }
   return imgArr;
