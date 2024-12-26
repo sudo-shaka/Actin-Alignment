@@ -118,7 +118,7 @@ float bestAngle(std::map<float,int> angleTotals, std::map<float,int> angleCounts
 }
 
 
-std::map<float, int> analyize(std::vector<std::vector<int>> imgArr,cv::Mat* image, std::vector<float> angles, std::vector<coord> line, int r){
+std::map<float, int> analyize(int** imgArr,cv::Mat* image, std::vector<float> angles, std::vector<coord> line, int r){
 
   std::map<float,int> counts; //output histogram
   cv::Mat img = *image; // input image
