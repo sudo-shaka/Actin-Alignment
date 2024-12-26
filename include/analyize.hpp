@@ -21,4 +21,4 @@ cv::Vec3b colorScale(float angle);
 std::vector<coord> lineGen(int radius, int fatness);
 int getThresh(cv::Mat image);
 float bestAngle(std::map<float,int> angleTotals, std::map<float,int> angleCounts);
-std::map<float, int> analyize(std::vector<std::vector<int>> imgArr,cv::Mat* image, std::vector<float> angles, std::vector<coord> line, int r);
+std::map<float, int> analyize(int** imgArr,cv::Mat* image, std::vector<float> angles, std::vector<coord> line, int r);
