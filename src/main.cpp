@@ -47,12 +47,17 @@ int main(int argc, char *argv[]){
       }
 
       //making array
-      std::vector<std::vector<int>> imgArr = im2arr(image);
+      int** imgArr = im2arr(image);
       //analyzing
       std::cout << "Analyzing image: " << imgFiles[i].string() << " ... " << std::flush;
       std::map<float,int> counts = analyize(imgArr, &image, angles, line, radius);
       std::cout << " Done." <<std::endl;
       cv::imwrite(imgFiles[i].filename().string() + "-out.png", image);
+      //cleaning
+      for(int r=0;r<image.rows;r++){
+          delete[] imgArr[r];
+      }
+      delete[] imgArr;
 
       //writing csv file
       if(outFile.is_open()){
