@@ -27,18 +27,28 @@ int main(int argc, char *argv[]){
 
     //if no images found, exit program
     if(imgFiles.size() == 0){
-            std::cout << "No image files found. Exiting." << std::endl;
-            return 0;
+      std::cout << "No image files found. Exiting." << std::endl;
+      return 0;
     }
-    //making CSV to export data
-    std::ofstream outFile("output.csv");
 
     //setting up analysis;
     int radius = 20;
     std::vector<float> angles = anglesEvery(15.0);
     std::vector<coord> line = lineGen(radius, 1);
 
-    //for each image, open and do analysis
+    //making CSV to export data
+    std::ofstream outFile("output.csv");
+    if(outFile.is_open() && !outFile.fail() && !outFile.bad()){
+      outFile << "Angle:";
+      for(auto& a : angles){
+        outFile << "," << a;
+      }
+      outFile << "\n";
+    } else{
+      std::cerr << "Unable to create file to export data." << std::endl;
+    }
+
+    //for each image, open and do analysis and write data to csv
     for(int i=0; i<imgFiles.size(); i++){
       cv::Mat image = cv::imread(imgFiles[i].string(), cv::IMREAD_COLOR);
       if(image.empty()){
@@ -51,7 +61,7 @@ int main(int argc, char *argv[]){
       //analyzing
       std::cout << "Analyzing image: " << imgFiles[i].string() << " ... " << std::flush;
       std::map<float,int> counts = analyize(imgArr, &image, angles, line, radius);
-      std::cout << " Done." <<std::endl;
+      std::cout << " Done." <<std::flush;
       cv::imwrite(imgFiles[i].filename().string() + "-out.png", image);
       //cleaning
       for(int r=0;r<image.rows;r++){
@@ -60,27 +70,19 @@ int main(int argc, char *argv[]){
       delete[] imgArr;
 
       //writing csv file
-      if(outFile.is_open()){
-        if(i == 0){
-          outFile << "Angle:";
-          for(auto& a : angles){
-            outFile << "," << a;
-          }
-          outFile << "\n";
-        }
-        outFile << imgFiles[i].string() << ":";
-        for(auto& pair : counts){
-          outFile << "," << pair.second;
-        }
-        outFile << "\n";
-      } else {
-        std::cerr << "Error: Could not open output csv for writing." << std::endl;
+      if(!outFile.is_open() || outFile.fail() || outFile.bad()){
+        std::cout << std::endl;
+        continue;
       }
-    }
 
-    if(outFile.is_open()){
-      std::cout << "Check 'output.csv' for results." << std::endl;
-    }
+      outFile << imgFiles[i].string() << ":";
+      for(auto& pair : counts){
+        outFile << "," << pair.second;
+      }
+      outFile << "\n";
 
+      std::cout << "  ---> Saved to output.csv." << std::endl;
+    }
+    
     return 0;
 }

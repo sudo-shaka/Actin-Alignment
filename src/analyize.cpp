@@ -90,16 +90,8 @@ std::vector<coord> lineGen(int radius, int fatness){
 int getThresh(cv::Mat image){
   cv::Scalar mean, stddev;
   cv::meanStdDev(image,mean,stddev);
-  int ave,std;
-
-  ave = float(mean[0]);
-  std = float(stddev[0]);
-  int ans = int(ave + 0.5*std);
-  return ans;
-  if(ans > 100){
-    return ans;
-  }
-  return 100;
+  int ans = int(float(mean[0]) + 0.5*float(stddev[0]));
+  return ans > 100 ? 100 : ans;
 }
 
 //for each line, find the angle which has the most neighboring pixels
