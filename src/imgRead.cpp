@@ -5,7 +5,7 @@
 #include <vector>
 #include <filesystem>
 
-//return all files found with a image effile extension
+//return all files found with a image file extension
 std::vector<std::filesystem::path> imgPaths(std::vector<std::string> arg){
   std::vector<std::filesystem::path> paths;
   std::error_code err;
