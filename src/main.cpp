@@ -8,9 +8,9 @@
 #include <map>
 #include <cmath>
 #include <opencv2/opencv.hpp>
-#include "../include/analyize.hpp"
-#include "../include/imgRead.hpp"
-#include "../include/csvHandler.hpp"
+#include "analyize.hpp"
+#include "imgRead.hpp"
+#include "csvHandler.hpp"
 
 int main(int argc, char *argv[]){
     //getting filepaths from user arguments
