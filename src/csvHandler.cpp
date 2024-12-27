@@ -3,7 +3,7 @@
 #include <fstream>
 #include <map>
 #include <iostream>
-#include "../include/csvHandler.hpp"
+#include "csvHandler.hpp"
 
 void csvInit(std::string filename, std::vector<float> angles){
     std::ofstream file(filename);
@@ -21,7 +21,7 @@ void csvInit(std::string filename, std::vector<float> angles){
 void csvAppendHist(std::string filename, std::string conditionName,std::map<float,int> hist){
     std::ofstream file(filename, std::ios::app);
     if(!file || !file.is_open() || file.fail() || file.bad()){
-        std::cerr << "Unable to create file to export data." << std::endl;
+        std::cerr << "Unable to append file to export data." << std::endl;
         return;
     }
     file << conditionName << ":";

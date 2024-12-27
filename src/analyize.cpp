@@ -5,7 +5,7 @@
 #include <cmath>
 #include <filesystem>
 #include <opencv2/opencv.hpp>
-#include "../include/analyize.hpp"
+#include "analyize.hpp"
 
 //generate a vector of angles every delta. Similar to linspace(-90,90,delta)
 std::vector<float> anglesEvery(float delta){
