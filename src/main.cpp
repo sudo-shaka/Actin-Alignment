@@ -10,6 +10,7 @@
 #include <opencv2/opencv.hpp>
 #include "../include/analyize.hpp"
 #include "../include/imgRead.hpp"
+#include "../include/csvHandler.hpp"
 
 int main(int argc, char *argv[]){
     //getting filepaths from user arguments
@@ -37,16 +38,8 @@ int main(int argc, char *argv[]){
     std::vector<coord> line = lineGen(radius, 1);
 
     //making CSV to export data
-    std::ofstream outFile("output.csv");
-    if(outFile.is_open() && !outFile.fail() && !outFile.bad()){
-      outFile << "Angle:";
-      for(auto& a : angles){
-        outFile << "," << a;
-      }
-      outFile << "\n";
-    } else{
-      std::cerr << "Unable to create file to export data." << std::endl;
-    }
+    std::string outFile = "output.csv";
+    csvInit(outFile, angles);
 
     //for each image, open and do analysis and write data to csv
     for(int i=0; i<imgFiles.size(); i++){
@@ -70,18 +63,7 @@ int main(int argc, char *argv[]){
       delete[] imgArr;
 
       //writing csv file
-      if(!outFile.is_open() || outFile.fail() || outFile.bad()){
-        std::cout << std::endl;
-        continue;
-      }
-
-      outFile << imgFiles[i].string() << ":";
-      for(auto& pair : counts){
-        outFile << "," << pair.second;
-      }
-      outFile << "\n";
-
-      std::cout << "  ---> Saved to output.csv." << std::endl;
+      csvAppendHist(outFile, imgFiles[i].string(), counts);
     }
     
     return 0;
